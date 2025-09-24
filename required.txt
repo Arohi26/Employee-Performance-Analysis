@@ -1,0 +1,7 @@
+pandas
+plotly
+dash
+dash-bootstrap-components
+seaborn
+matplotlib
+openpyxl

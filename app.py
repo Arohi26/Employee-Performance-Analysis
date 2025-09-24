@@ -4,6 +4,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 from dash import Dash, dcc, html
 import dash_bootstrap_components as dbc
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 # to load employee data
 df = pd.read_excel('employee_data.xlsx')
@@ -41,17 +43,31 @@ fig_scatter = px.scatter(df, x='Attendance', y='Appraisal_Score', color='Departm
 
 fig_box = px.box(df, x='Department', y='Project_Completion', color='Department', title='Project Completion by Department')
 
-# Layout of the dashboard
+# --- Seaborn/Matplotlib Visualization ---
+plt.figure(figsize=(8,6))
+sns.boxplot(data=df, x='Department', y='Appraisal_Score', palette='Set2')
+plt.title("Appraisal Score Distribution by Department")
+plt.tight_layout()
+plt.savefig("seaborn_boxplot.png")   # save the plot as an image
+plt.close()
+
+# --- Dash Layout ---
 app.layout = dbc.Container([
     html.H1("Employee Performance Dashboard", style={'textAlign':'center'}),
     dcc.Graph(figure=fig_appraisal),
     dcc.Graph(figure=fig_corr),
     dcc.Graph(figure=fig_scatter),
     dcc.Graph(figure=fig_box),
+
     html.H3("High Performers"),
     dbc.Table.from_dataframe(high_performers[['Employee_Name','Appraisal_Score']], striped=True, bordered=True, hover=True),
+
     html.H3("Low Performers"),
-    dbc.Table.from_dataframe(low_performers[['Employee_Name','Appraisal_Score']], striped=True, bordered=True, hover=True)
+    dbc.Table.from_dataframe(low_performers[['Employee_Name','Appraisal_Score']], striped=True, bordered=True, hover=True),
+
+    #  Add Seaborn plot here
+    html.H3("Seaborn Visualization"),
+    html.Img(src="seaborn_boxplot.png", style={'width': '70%', 'display': 'block', 'margin': 'auto'})
 ], fluid=True)
 
 
