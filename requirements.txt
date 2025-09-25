@@ -1,9 +1,8 @@
-pandas
-plotly
 dash
 dash-bootstrap-components
-seaborn
+pandas
+plotly
 matplotlib
+seaborn
 openpyxl
-
-
+gunicorn
